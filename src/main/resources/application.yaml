@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: pos-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/posdb
+    username: posuser
+    password: pospass
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  flyway:
+    enabled: true
+
+server:
+  port: 8080
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
