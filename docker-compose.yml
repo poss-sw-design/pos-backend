@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:15
+    container_name: pos_postgres
     environment:
       POSTGRES_DB: posdb
       POSTGRES_USER: posuser
@@ -8,4 +9,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:
