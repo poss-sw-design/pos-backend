@@ -1,7 +1,9 @@
 package com.pos.backend.dto.branch;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class BranchCreateRequest {
 
@@ -9,13 +11,19 @@ public class BranchCreateRequest {
   private Long merchantId;
 
   @NotBlank
+  @Size(max = 255)
   private String name;
 
   private String addressLine1;
   private String city;
   private String region;
   private String postalCode;
+
+  @NotBlank
   private String phone;
+
+  @Email
+  @NotBlank
   private String email;
 
   public Long getMerchantId() { return merchantId; }
