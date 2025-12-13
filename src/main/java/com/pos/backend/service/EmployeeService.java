@@ -15,6 +15,9 @@ import com.pos.backend.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class EmployeeService {
@@ -89,5 +92,11 @@ public class EmployeeService {
     employee.setUpdatedAt(java.time.OffsetDateTime.now());
 
     return EmployeeResponse.from(employee);
+  }
+
+  public List<EmployeeResponse> getAllEmployees() {
+    return employeeRepository.findAll().stream()
+      .map(EmployeeResponse::from)
+      .collect(Collectors.toList());
   }
 }

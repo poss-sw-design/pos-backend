@@ -19,9 +19,8 @@ public class OrderController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public OrderResponse createOrder(@Valid @RequestBody OrderCreateRequest request,
-                                   @RequestBody List<OrderItemCreateRequest> items) {
-    return orderService.createOrder(request, items);
+  public OrderResponse createOrder(@Valid @RequestBody OrderCreateWrapper wrapper) {
+    return orderService.createOrder(wrapper.getOrder(), wrapper.getItems());
   }
 
   @GetMapping("/{orderId}")
@@ -58,5 +57,10 @@ public class OrderController {
   public OrderResponse removeOrderItem(@PathVariable Long orderId,
                                        @PathVariable Long orderItemId) {
     return orderService.removeOrderItem(orderId, orderItemId);
+  }
+
+  @GetMapping
+  public List<OrderResponse> getAllOrders() {
+    return orderService.getAllOrders();
   }
 }

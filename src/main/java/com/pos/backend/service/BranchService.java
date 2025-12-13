@@ -9,6 +9,9 @@ import com.pos.backend.repository.MerchantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class BranchService {
 
@@ -47,5 +50,11 @@ public class BranchService {
       .orElseThrow(() -> new IllegalArgumentException("Branch not found"));
 
     return BranchResponse.from(branch);
+  }
+
+  public List<BranchResponse> getAllBranches() {
+    return branchRepository.findAll().stream()
+      .map(BranchResponse::from)
+      .collect(Collectors.toList());
   }
 }

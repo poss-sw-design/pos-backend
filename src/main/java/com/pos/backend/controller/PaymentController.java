@@ -3,6 +3,7 @@ package com.pos.backend.controller;
 import com.pos.backend.dto.payment.PaymentCreateRequest;
 import com.pos.backend.dto.payment.PaymentResponse;
 import com.pos.backend.dto.payment.PaymentUpdateRequest;
+import com.pos.backend.dto.product.ProductResponse;
 import com.pos.backend.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -46,4 +47,5 @@ public class PaymentController {
   public void deletePayment(@PathVariable Long id) {
     paymentService.deletePayment(id);
   }
+
 }

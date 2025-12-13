@@ -37,7 +37,7 @@ public class Product {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 32)
-  private ProductStatus status = ProductStatus.ACTIVE;
+  private ProductStatus status = ProductStatus.active;
 
   @Column(nullable = false)
   private OffsetDateTime createdAt = OffsetDateTime.now();

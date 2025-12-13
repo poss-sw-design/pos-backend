@@ -1,6 +1,6 @@
 CREATE TABLE role (
   role_id BIGSERIAL PRIMARY KEY,
-  name VARCHAR(50) NOT NULL UNIQUE,
+  name VARCHAR(50) NOT NULL UNIQUE DEFAULT LOWER('user'),
   description VARCHAR(255),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -8,16 +8,12 @@ CREATE TABLE role (
 
 CREATE TABLE permission (
   permission_id BIGSERIAL PRIMARY KEY,
-
-  name VARCHAR(100) NOT NULL UNIQUE,
+  name VARCHAR(100) NOT NULL UNIQUE DEFAULT LOWER('read'),
   resource VARCHAR(255) NOT NULL,
-  action   VARCHAR(255) NOT NULL,
-
+  action VARCHAR(255) NOT NULL,
   description VARCHAR(255),
-
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
   CONSTRAINT uk_resource_action UNIQUE (resource, action)
 );
 
@@ -49,7 +45,7 @@ CREATE TABLE employee (
   last_name VARCHAR(100) NOT NULL,
   phone VARCHAR(20),
 
-  status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  status VARCHAR(20) NOT NULL DEFAULT LOWER('active'),
 
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),

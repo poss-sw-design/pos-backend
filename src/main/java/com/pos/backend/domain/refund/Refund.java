@@ -30,7 +30,7 @@ public class Refund {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
-  private RefundStatus status = RefundStatus.PENDING;
+  private RefundStatus status = RefundStatus.pending;
 
   private Long processedBy;
   private Long approvedBy;

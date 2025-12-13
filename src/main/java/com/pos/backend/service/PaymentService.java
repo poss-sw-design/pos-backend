@@ -43,7 +43,7 @@ public class PaymentService {
     payment.setSplit(request.getSplit());
     payment.setTipAmount(request.getTipAmount());
     // PaymentStatus initial value
-    payment.setStatus(com.pos.backend.domain.payment.PaymentStatus.PENDING);
+    payment.setStatus(com.pos.backend.domain.payment.PaymentStatus.pending);
 
     Payment saved = paymentRepository.save(payment);
     return PaymentResponse.from(saved);

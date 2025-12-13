@@ -139,4 +139,10 @@ public class OrderService {
     orderRepository.save(order);
     return OrderResponse.from(order);
   }
+
+  public List<OrderResponse> getAllOrders() {
+    return orderRepository.findAll().stream()
+      .map(OrderResponse::from)
+      .collect(Collectors.toList());
+  }
 }
