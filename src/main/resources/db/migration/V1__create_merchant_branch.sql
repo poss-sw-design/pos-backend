@@ -17,7 +17,6 @@ CREATE TABLE merchant (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
--- branch table
 CREATE TABLE branch (
   branch_id BIGSERIAL PRIMARY KEY,
   merchant_id BIGINT NOT NULL,
