@@ -3,6 +3,7 @@ package com.pos.backend.dto.product;
 import com.pos.backend.domain.product.Product;
 import com.pos.backend.domain.product.ProductStatus;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 public class ProductResponse {
@@ -16,7 +17,7 @@ public class ProductResponse {
   private String productTypeName;
 
   private Long taxRateId;
-  private Double taxRateValue;
+  private BigDecimal taxRateValue;
 
   private String description;
   private String imageUrl;
@@ -62,7 +63,7 @@ public class ProductResponse {
   public String getProductTypeName() { return productTypeName; }
 
   public Long getTaxRateId() { return taxRateId; }
-  public Double getTaxRateValue() { return taxRateValue; }
+  public BigDecimal getTaxRateValue() { return taxRateValue; }
 
   public String getDescription() { return description; }
   public String getImageUrl() { return imageUrl; }

@@ -1,6 +1,7 @@
 package com.pos.backend.service;
 
 import com.pos.backend.domain.Merchant;
+import com.pos.backend.domain.MerchantStatus;
 import com.pos.backend.dto.merchant.MerchantCreateRequest;
 import com.pos.backend.dto.merchant.MerchantResponse;
 import com.pos.backend.dto.merchant.MerchantUpdateRequest;
@@ -53,7 +54,8 @@ public class MerchantService {
     }
     if (req.getPhone() != null) merchant.setPhone(req.getPhone());
     if (req.getEmail() != null) merchant.setEmail(req.getEmail());
-    if (req.getStatus() != null) merchant.setStatus(req.getStatus());
+    if (req.getStatus() != null)
+      merchant.setStatus(MerchantStatus.valueOf(req.getStatus()));
     if (req.getAddressLine1() != null) merchant.setAddressLine1(req.getAddressLine1());
 
     merchant.setUpdatedAt(java.time.OffsetDateTime.now());

@@ -14,11 +14,7 @@ public class Employee {
   private Long employeeId;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "merchant_id", nullable = false)
-  private Merchant merchant;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "branch_id", nullable = false)
+  @JoinColumn(name = "branch_id")
   private Branch branch;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -54,11 +50,9 @@ public class Employee {
 
   protected Employee() {}
 
-  public Employee(Merchant merchant, Branch branch, Role role,
+  public Employee(Branch branch, Role role,
                   String email, String password,
                   String firstName, String lastName, String phone) {
-
-    this.merchant = merchant;
     this.branch = branch;
     this.role = role;
     this.email = email;
@@ -66,27 +60,46 @@ public class Employee {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
+    this.status = EmployeeStatus.ACTIVE;
+  }
+
+  public Employee(Merchant merchant, Branch branch, Role role, String email, String password, String firstName, String lastName, String phone) {
   }
 
   public Long getEmployeeId() { return employeeId; }
-  public Merchant getMerchant() { return merchant; }
   public Branch getBranch() { return branch; }
-  public Role getRole() { return role; }
-  public String getEmail() { return email; }
-  public String getPassword() { return password; }
-  public String getFirstName() { return firstName; }
-  public String getLastName() { return lastName; }
-  public String getPhone() { return phone; }
-  public EmployeeStatus getStatus() { return status; }
-  public OffsetDateTime getCreatedAt() { return createdAt; }
-  public OffsetDateTime getUpdatedAt() { return updatedAt; }
-  public OffsetDateTime getLastLogin() { return lastLogin; }
+  public void setBranch(Branch branch) { this.branch = branch; }
 
+  public Role getRole() { return role; }
   public void setRole(Role role) { this.role = role; }
+
+  public String getEmail() { return email; }
+  public void setEmail(String email) { this.email = email; }
+
+  public String getPassword() { return password; }
+  public void setPassword(String password) { this.password = password; }
+
+  public String getFirstName() { return firstName; }
   public void setFirstName(String firstName) { this.firstName = firstName; }
+
+  public String getLastName() { return lastName; }
   public void setLastName(String lastName) { this.lastName = lastName; }
+
+  public String getPhone() { return phone; }
   public void setPhone(String phone) { this.phone = phone; }
+
+  public EmployeeStatus getStatus() { return status; }
   public void setStatus(EmployeeStatus status) { this.status = status; }
+
+  public OffsetDateTime getCreatedAt() { return createdAt; }
+  public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+
+  public OffsetDateTime getUpdatedAt() { return updatedAt; }
   public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+  public OffsetDateTime getLastLogin() { return lastLogin; }
   public void setLastLogin(OffsetDateTime lastLogin) { this.lastLogin = lastLogin; }
+
+  private Long merchantId;
+  public Long getMerchantId() { return merchantId; }
 }

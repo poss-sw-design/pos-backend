@@ -34,7 +34,7 @@ public class Order {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
-  private OrderStatus status = OrderStatus.OPEN;
+  private OrderStatus status;
 
   @Column(columnDefinition = "TEXT")
   private String specialRequests;
@@ -57,6 +57,7 @@ public class Order {
     this.merchant = merchant;
     this.employee = employee;
     this.orderNumber = orderNumber;
+    this.status = OrderStatus.OPEN;
   }
 
   public void addItem(OrderItem item) {
@@ -75,30 +76,21 @@ public class Order {
     this.totalAmount = items.stream()
       .mapToInt(i -> i.getUnitPrice() * i.getQuantity())
       .sum();
-
     this.finalAmount = this.totalAmount;
   }
 
   public Long getOrderId() { return orderId; }
-
   public Merchant getMerchant() { return merchant; }
   public Employee getEmployee() { return employee; }
-
   public String getOrderNumber() { return orderNumber; }
-
   public Discount getDiscount() { return discount; }
   public void setDiscount(Discount discount) { this.discount = discount; }
-
   public OrderStatus getStatus() { return status; }
   public void setStatus(OrderStatus status) { this.status = status; }
-
   public String getSpecialRequests() { return specialRequests; }
   public void setSpecialRequests(String specialRequests) { this.specialRequests = specialRequests; }
-
   public OffsetDateTime getOrderDate() { return orderDate; }
-
   public Integer getTotalAmount() { return totalAmount; }
   public Integer getFinalAmount() { return finalAmount; }
-
   public List<OrderItem> getItems() { return items; }
 }

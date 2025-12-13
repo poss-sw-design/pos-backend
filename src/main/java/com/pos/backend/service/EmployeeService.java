@@ -3,6 +3,7 @@ package com.pos.backend.service;
 import com.pos.backend.domain.Branch;
 import com.pos.backend.domain.Merchant;
 import com.pos.backend.domain.employee.Employee;
+import com.pos.backend.domain.employee.EmployeeStatus;
 import com.pos.backend.domain.employee.Role;
 import com.pos.backend.dto.employee.EmployeeCreateRequest;
 import com.pos.backend.dto.employee.EmployeeResponse;
@@ -80,22 +81,12 @@ public class EmployeeService {
       employee.setRole(role);
     }
 
-    if (req.getFirstName() != null) {
-      employee.setUpdatedAt(java.time.OffsetDateTime.now());
-      employee.setStatus(employee.getStatus());
-    }
+    if (req.getFirstName() != null) employee.setFirstName(req.getFirstName());
+    if (req.getLastName() != null) employee.setLastName(req.getLastName());
+    if (req.getPhone() != null) employee.setPhone(req.getPhone());
+    if (req.getStatus() != null) employee.setStatus(req.getStatus());
 
-    if (req.getLastName() != null) {
-      employee.setUpdatedAt(java.time.OffsetDateTime.now());
-    }
-
-    if (req.getPhone() != null) {
-      employee.setUpdatedAt(java.time.OffsetDateTime.now());
-    }
-
-    if (req.getStatus() != null) {
-      employee.setStatus(req.getStatus());
-    }
+    employee.setUpdatedAt(java.time.OffsetDateTime.now());
 
     return EmployeeResponse.from(employee);
   }

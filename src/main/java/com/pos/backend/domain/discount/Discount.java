@@ -1,7 +1,7 @@
 package com.pos.backend.domain.discount;
 
 import jakarta.persistence.*;
-
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -24,14 +24,14 @@ public class Discount {
   private DiscountValueType valueType;
 
   @Column(nullable = false, precision = 10, scale = 2)
-  private Double value;
+  private BigDecimal value;
 
   @Column(nullable = false, precision = 10, scale = 2)
-  private Double minimumOrderValue = 0.0;
+  private BigDecimal minimumOrderValue = BigDecimal.ZERO;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
-  private DiscountStatus status = DiscountStatus.INACTIVE;
+  private DiscountStatus status;
 
   private Integer currentUses = 0;
   private Integer maxUses;
@@ -49,29 +49,20 @@ public class Discount {
 
   protected Discount() {}
 
-  /* getters / setters */
-
   public Long getDiscountId() { return discountId; }
-
   public String getName() { return name; }
   public void setName(String name) { this.name = name; }
-
   public DiscountType getType() { return type; }
   public void setType(DiscountType type) { this.type = type; }
-
   public DiscountValueType getValueType() { return valueType; }
   public void setValueType(DiscountValueType valueType) { this.valueType = valueType; }
-
-  public Double getValue() { return value; }
-  public void setValue(Double value) { this.value = value; }
-
-  public Double getMinimumOrderValue() { return minimumOrderValue; }
-
+  public BigDecimal getValue() { return value; }
+  public void setValue(BigDecimal value) { this.value = value; }
+  public BigDecimal getMinimumOrderValue() { return minimumOrderValue; }
   public DiscountStatus getStatus() { return status; }
   public void setStatus(DiscountStatus status) { this.status = status; }
-
   public OffsetDateTime getStartTime() { return startTime; }
   public void setStartTime(OffsetDateTime startTime) { this.startTime = startTime; }
-
   public OffsetDateTime getEndTime() { return endTime; }
+  public void setEndTime(OffsetDateTime endTime) { this.endTime = endTime; }
 }

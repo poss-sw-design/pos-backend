@@ -6,15 +6,8 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(
-  name = "order_item",
-  uniqueConstraints = {
-    @UniqueConstraint(
-      name = "uk_order_product",
-      columnNames = {"order_id", "product_id"}
-    )
-  }
-)
+@Table(name = "order_item",
+  uniqueConstraints = {@UniqueConstraint(name = "uk_order_product", columnNames = {"order_id", "product_id"})})
 public class OrderItem {
 
   @Id
@@ -47,16 +40,11 @@ public class OrderItem {
   }
 
   public Long getOrderItemId() { return orderItemId; }
-
   public Order getOrder() { return order; }
   public void setOrder(Order order) { this.order = order; }
-
   public Product getProduct() { return product; }
-
   public Integer getQuantity() { return quantity; }
   public void setQuantity(Integer quantity) { this.quantity = quantity; }
-
   public Integer getUnitPrice() { return unitPrice; }
-
   public OffsetDateTime getCreatedAt() { return createdAt; }
 }

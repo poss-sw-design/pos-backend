@@ -13,7 +13,7 @@ CREATE TABLE orders (
 
 CREATE TABLE order_item (
   order_item_id BIGSERIAL PRIMARY KEY,
-  order_id BIGINT NOT NULL,
+  order_id BIGINT NOT NULL REFERENCES orders(order_id) ON DELETE CASCADE,
   product_id BIGINT NOT NULL,
   quantity INT NOT NULL,
   unit_price INT NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE discount (
 
 CREATE TABLE payment (
   payment_id BIGSERIAL PRIMARY KEY,
-  order_id BIGINT NOT NULL UNIQUE,
+  order_id BIGINT NOT NULL UNIQUE REFERENCES orders(order_id) ON DELETE CASCADE,
   merchant_id BIGINT NOT NULL,
   payment_method VARCHAR(20) NOT NULL,
   status VARCHAR(20) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE payment (
 
 CREATE TABLE refund (
   refund_id BIGSERIAL PRIMARY KEY,
-  order_id BIGINT NOT NULL UNIQUE,
+  order_id BIGINT NOT NULL UNIQUE REFERENCES orders(order_id) ON DELETE CASCADE,
   amount NUMERIC(12,2) NOT NULL,
   reason TEXT NOT NULL,
   refund_type VARCHAR(20) NOT NULL,

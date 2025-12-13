@@ -6,9 +6,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(
   name = "permission",
-  uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"resource", "action"})
-  }
+  uniqueConstraints = {@UniqueConstraint(columnNames = {"resource", "action"})}
 )
 public class Permission {
 
@@ -42,8 +40,17 @@ public class Permission {
 
   public Long getPermissionId() { return permissionId; }
   public String getName() { return name; }
+  public void setName(String name) { this.name = name; }
+
   public String getResource() { return resource; }
+  public void setResource(String resource) { this.resource = resource; }
+
   public String getAction() { return action; }
+  public void setAction(String action) { this.action = action; }
+
   public String getDescription() { return description; }
+  public void setDescription(String description) { this.description = description; }
+
   public OffsetDateTime getCreatedAt() { return createdAt; }
+  public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
 }

@@ -7,11 +7,11 @@ spring:
     password: pospass
   jpa:
     hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
+      ddl-auto: update
+  properties:
+    hibernate:
+      format_sql: true
+  show-sql: true
 
   flyway:
     enabled: true

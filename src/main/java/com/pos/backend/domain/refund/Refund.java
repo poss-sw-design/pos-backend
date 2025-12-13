@@ -3,6 +3,7 @@ package com.pos.backend.domain.refund;
 import com.pos.backend.domain.order.Order;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -18,7 +19,7 @@ public class Refund {
   private Order order;
 
   @Column(nullable = false, precision = 12, scale = 2)
-  private Double amount;
+  private BigDecimal amount;
 
   @Column(nullable = false, columnDefinition = "TEXT")
   private String reason;

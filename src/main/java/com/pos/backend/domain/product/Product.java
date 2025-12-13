@@ -35,8 +35,8 @@ public class Product {
 
   private String imageUrl;
 
-  @Column(nullable = false, length = 32)
   @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 32)
   private ProductStatus status = ProductStatus.ACTIVE;
 
   @Column(nullable = false)
@@ -57,7 +57,6 @@ public class Product {
     this.taxRate = taxRate;
     this.description = description;
     this.imageUrl = imageUrl;
-    this.status = ProductStatus.ACTIVE;
   }
 
   public Long getProductId() { return productId; }

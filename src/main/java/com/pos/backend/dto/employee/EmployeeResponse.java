@@ -26,7 +26,7 @@ public class EmployeeResponse {
     EmployeeResponse r = new EmployeeResponse();
 
     r.employeeId = e.getEmployeeId();
-    r.merchantId = e.getMerchant().getMerchantId();
+    r.merchantId = e.getMerchantId();
     r.branchId = e.getBranch().getBranchId();
     r.roleId = e.getRole().getRoleId();
     r.roleName = e.getRole().getName();

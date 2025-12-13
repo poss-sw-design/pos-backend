@@ -32,7 +32,7 @@ public class MerchantResponse {
 
     res.phone = merchant.getPhone();
     res.email = merchant.getEmail();
-    res.status = merchant.getStatus();
+    res.status = String.valueOf(merchant.getStatus());
 
     return res;
   }
