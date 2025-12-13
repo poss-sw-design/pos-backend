@@ -47,4 +47,11 @@ public class OrderItem {
   public void setQuantity(Integer quantity) { this.quantity = quantity; }
   public Integer getUnitPrice() { return unitPrice; }
   public OffsetDateTime getCreatedAt() { return createdAt; }
+
+  public void setProduct(Product product) {
+  }
+
+  public void setUnitPrice(Integer unitPrice) {
+
+  }
 }

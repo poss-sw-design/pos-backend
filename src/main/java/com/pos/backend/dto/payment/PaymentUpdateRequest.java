@@ -18,4 +18,5 @@ public class PaymentUpdateRequest {
 
   public BigDecimal getTipAmount() { return tipAmount; }
   public void setTipAmount(BigDecimal tipAmount) { this.tipAmount = tipAmount; }
+
 }

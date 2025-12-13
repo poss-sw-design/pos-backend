@@ -42,7 +42,7 @@ public class Payment {
 
   private OffsetDateTime processedAt;
 
-  protected Payment() {}
+  public Payment() {}
 
   public Long getPaymentId() { return paymentId; }
   public Order getOrder() { return order; }
@@ -57,4 +57,7 @@ public class Payment {
   public OffsetDateTime getCreatedAt() { return createdAt; }
   public OffsetDateTime getProcessedAt() { return processedAt; }
   public void setProcessedAt(OffsetDateTime processedAt) { this.processedAt = processedAt; }
+
+  public void setOrder(Order order) {
+  }
 }

@@ -47,7 +47,7 @@ public class Discount {
   @Column(nullable = false)
   private OffsetDateTime updatedAt = OffsetDateTime.now();
 
-  protected Discount() {}
+  public Discount() {}
 
   public Long getDiscountId() { return discountId; }
   public String getName() { return name; }
@@ -65,4 +65,8 @@ public class Discount {
   public void setStartTime(OffsetDateTime startTime) { this.startTime = startTime; }
   public OffsetDateTime getEndTime() { return endTime; }
   public void setEndTime(OffsetDateTime endTime) { this.endTime = endTime; }
+
+  public void setMinimumOrderValue(BigDecimal minimumOrderValue) {
+
+  }
 }
