@@ -4,6 +4,7 @@ import com.pos.backend.dto.product.ProductCreateRequest;
 import com.pos.backend.dto.product.ProductResponse;
 import com.pos.backend.dto.product.ProductUpdateRequest;
 import com.pos.backend.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,9 @@ public class ProductController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ProductResponse createProduct(@RequestBody ProductCreateRequest req) {
+  public ProductResponse createProduct(
+    @Valid @RequestBody ProductCreateRequest req
+  ) {
     return productService.createProduct(req);
   }
 
@@ -31,8 +34,14 @@ public class ProductController {
   @PatchMapping("/{productId}")
   public ProductResponse updateProduct(
     @PathVariable Long productId,
-    @RequestBody ProductUpdateRequest req
+    @Valid @RequestBody ProductUpdateRequest req
   ) {
     return productService.updateProduct(productId, req);
+  }
+
+  @DeleteMapping("/{productId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteProduct(@PathVariable Long productId) {
+    productService.deleteProduct(productId);
   }
 }

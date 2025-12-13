@@ -2,6 +2,7 @@ package com.pos.backend.service;
 
 import com.pos.backend.domain.Merchant;
 import com.pos.backend.domain.product.Product;
+import com.pos.backend.domain.product.ProductStatus;
 import com.pos.backend.domain.product.ProductType;
 import com.pos.backend.domain.product.TaxRate;
 import com.pos.backend.dto.product.ProductCreateRequest;
@@ -13,6 +14,8 @@ import com.pos.backend.repository.ProductTypeRepository;
 import com.pos.backend.repository.TaxRateRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.OffsetDateTime;
 
 @Service
 public class ProductService {
@@ -67,8 +70,14 @@ public class ProductService {
 
   @Transactional(readOnly = true)
   public ProductResponse getProduct(Long productId) {
+
     Product p = productRepository.findById(productId)
       .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+    if (p.getStatus() == ProductStatus.INACTIVE) {
+      throw new IllegalStateException("Product is inactive");
+    }
+
     return ProductResponse.from(p);
   }
 
@@ -100,6 +109,18 @@ public class ProductService {
 
     if (req.getStatus() != null) product.setStatus(req.getStatus());
 
+    product.setUpdatedAt(OffsetDateTime.now());
+
     return ProductResponse.from(product);
+  }
+
+  @Transactional
+  public void deleteProduct(Long productId) {
+
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+    product.setStatus(ProductStatus.INACTIVE);
+    product.setUpdatedAt(OffsetDateTime.now());
   }
 }
