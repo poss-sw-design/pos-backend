@@ -1,43 +1,126 @@
 package com.pos.backend.service;
 
-import com.pos.backend.domain.Product;
+import com.pos.backend.domain.Merchant;
+import com.pos.backend.domain.product.Product;
+import com.pos.backend.domain.product.ProductStatus;
+import com.pos.backend.domain.product.ProductType;
+import com.pos.backend.domain.product.TaxRate;
+import com.pos.backend.dto.product.ProductCreateRequest;
+import com.pos.backend.dto.product.ProductResponse;
+import com.pos.backend.dto.product.ProductUpdateRequest;
+import com.pos.backend.repository.MerchantRepository;
 import com.pos.backend.repository.ProductRepository;
+import com.pos.backend.repository.ProductTypeRepository;
+import com.pos.backend.repository.TaxRateRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.OffsetDateTime;
 
 @Service
 public class ProductService {
 
-  private final ProductRepository repo;
+  private final MerchantRepository merchantRepository;
+  private final ProductRepository productRepository;
+  private final ProductTypeRepository productTypeRepository;
+  private final TaxRateRepository taxRateRepository;
 
-  public ProductService(ProductRepository repo) {
-    this.repo = repo;
+  public ProductService(MerchantRepository merchantRepository,
+                        ProductRepository productRepository,
+                        ProductTypeRepository productTypeRepository,
+                        TaxRateRepository taxRateRepository) {
+
+    this.merchantRepository = merchantRepository;
+    this.productRepository = productRepository;
+    this.productTypeRepository = productTypeRepository;
+    this.taxRateRepository = taxRateRepository;
   }
 
-  public List<Product> findAll() {
-    return repo.findAll();
+  @Transactional
+  public ProductResponse createProduct(ProductCreateRequest req) {
+
+    Merchant merchant = merchantRepository.findById(req.getMerchantId())
+      .orElseThrow(() -> new IllegalArgumentException("Merchant not found"));
+
+    ProductType productType = null;
+    if (req.getProductTypeId() != null) {
+      productType = productTypeRepository.findById(req.getProductTypeId())
+        .orElseThrow(() -> new IllegalArgumentException("ProductType not found"));
+    }
+
+    TaxRate taxRate = null;
+    if (req.getTaxRateId() != null) {
+      taxRate = taxRateRepository.findById(req.getTaxRateId())
+        .orElseThrow(() -> new IllegalArgumentException("TaxRate not found"));
+    }
+
+    Product product = new Product(
+      merchant,
+      req.getName(),
+      req.getPrice(),
+      productType,
+      taxRate,
+      req.getDescription(),
+      req.getImageUrl()
+    );
+
+    productRepository.save(product);
+    return ProductResponse.from(product);
   }
 
-  public Product findById(Long id) {
-    return repo.findById(id).orElse(null);
+  @Transactional(readOnly = true)
+  public ProductResponse getProduct(Long productId) {
+
+    Product p = productRepository.findById(productId)
+      .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+    if (p.getStatus() == ProductStatus.INACTIVE) {
+      throw new IllegalStateException("Product is inactive");
+    }
+
+    return ProductResponse.from(p);
   }
 
-  public Product create(Product product) {
-    return repo.save(product);
+  @Transactional
+  public ProductResponse updateProduct(Long productId, ProductUpdateRequest req) {
+
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+    if (req.getName() != null) product.setName(req.getName());
+
+    if (req.getPrice() != null) product.setPrice(req.getPrice());
+
+    if (req.getProductTypeId() != null) {
+      ProductType type = productTypeRepository.findById(req.getProductTypeId())
+        .orElseThrow(() -> new IllegalArgumentException("ProductType not found"));
+      product.setProductType(type);
+    }
+
+    if (req.getTaxRateId() != null) {
+      TaxRate taxRate = taxRateRepository.findById(req.getTaxRateId())
+        .orElseThrow(() -> new IllegalArgumentException("TaxRate not found"));
+      product.setTaxRate(taxRate);
+    }
+
+    if (req.getDescription() != null) product.setDescription(req.getDescription());
+
+    if (req.getImageUrl() != null) product.setImageUrl(req.getImageUrl());
+
+    if (req.getStatus() != null) product.setStatus(req.getStatus());
+
+    product.setUpdatedAt(OffsetDateTime.now());
+
+    return ProductResponse.from(product);
   }
 
-  public Product update(Long id, Product update) {
-    return repo.findById(id).map(p -> {
-      p.setName(update.getName());
-      p.setPrice(update.getPrice());
-      p.setCategory(update.getCategory());
-      p.setMerchantId(update.getMerchantId());
-      return repo.save(p);
-    }).orElse(null);
-  }
+  @Transactional
+  public void deleteProduct(Long productId) {
 
-  public void delete(Long id) {
-    repo.deleteById(id);
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+    product.setStatus(ProductStatus.INACTIVE);
+    product.setUpdatedAt(OffsetDateTime.now());
   }
 }

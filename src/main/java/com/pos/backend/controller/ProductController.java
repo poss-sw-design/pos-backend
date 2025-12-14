@@ -1,52 +1,47 @@
 package com.pos.backend.controller;
 
-import com.pos.backend.domain.Product;
+import com.pos.backend.dto.product.ProductCreateRequest;
+import com.pos.backend.dto.product.ProductResponse;
+import com.pos.backend.dto.product.ProductUpdateRequest;
 import com.pos.backend.service.ProductService;
-import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
-  private final ProductService service;
+  private final ProductService productService;
 
-  public ProductController(ProductService service) {
-    this.service = service;
-  }
-
-  @GetMapping
-  public List<Product> getAll() {
-    return service.findAll();
-  }
-
-  @GetMapping("/{id}")
-  public ResponseEntity<Product> getById(@PathVariable Long id) {
-    Product p = service.findById(id);
-    if (p == null) return ResponseEntity.notFound().build();
-    return ResponseEntity.ok(p);
+  public ProductController(ProductService productService) {
+    this.productService = productService;
   }
 
   @PostMapping
-  public Product create(@RequestBody Product product) {
-    return service.create(product);
-  }
-
-  @PutMapping("/{id}")
-  public ResponseEntity<Product> update(
-    @PathVariable Long id,
-    @RequestBody Product product
+  @ResponseStatus(HttpStatus.CREATED)
+  public ProductResponse createProduct(
+    @Valid @RequestBody ProductCreateRequest req
   ) {
-    Product updated = service.update(id, product);
-    if (updated == null) return ResponseEntity.notFound().build();
-    return ResponseEntity.ok(updated);
+    return productService.createProduct(req);
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    service.delete(id);
-    return ResponseEntity.noContent().build();
+  @GetMapping("/{productId}")
+  public ProductResponse getProduct(@PathVariable Long productId) {
+    return productService.getProduct(productId);
+  }
+
+  @PatchMapping("/{productId}")
+  public ProductResponse updateProduct(
+    @PathVariable Long productId,
+    @Valid @RequestBody ProductUpdateRequest req
+  ) {
+    return productService.updateProduct(productId, req);
+  }
+
+  @DeleteMapping("/{productId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteProduct(@PathVariable Long productId) {
+    productService.deleteProduct(productId);
   }
 }
