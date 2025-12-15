@@ -6,6 +6,7 @@ import com.pos.backend.dto.payment.PaymentCreateRequest;
 import com.pos.backend.dto.payment.PaymentResponse;
 import com.pos.backend.service.OrderPaymentService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +26,13 @@ public class OrderPaymentController {
   public ResponseEntity<PaymentResponse> createOrderWithPayment(
     @Valid @RequestBody OrderPaymentRequest request
   ) {
+    OrderCreateRequest orderReq = request.getOrder();
+
+    List<OrderItemCreateRequest> itemsReq = orderReq.getItems();
+
     PaymentResponse response = orderPaymentService.createOrderWithItemsDiscountAndPayment(
-      request.getOrder(),
-      request.getItems(),
+      orderReq,
+      itemsReq,
       request.getDiscountId(),
       request.getPayment()
     );
@@ -35,16 +40,17 @@ public class OrderPaymentController {
   }
 
   public static class OrderPaymentRequest {
+
+    @NotNull
     private OrderCreateRequest order;
-    private List<OrderItemCreateRequest> items;
+
     private Long discountId;
+
+    @NotNull
     private PaymentCreateRequest payment;
 
     public OrderCreateRequest getOrder() { return order; }
     public void setOrder(OrderCreateRequest order) { this.order = order; }
-
-    public List<OrderItemCreateRequest> getItems() { return items; }
-    public void setItems(List<OrderItemCreateRequest> items) { this.items = items; }
 
     public Long getDiscountId() { return discountId; }
     public void setDiscountId(Long discountId) { this.discountId = discountId; }

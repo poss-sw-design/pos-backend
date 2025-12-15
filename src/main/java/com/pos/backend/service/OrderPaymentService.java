@@ -10,6 +10,8 @@ import com.pos.backend.dto.order.OrderItemCreateRequest;
 import com.pos.backend.dto.payment.PaymentCreateRequest;
 import com.pos.backend.dto.payment.PaymentResponse;
 import com.pos.backend.repository.DiscountRepository;
+import com.pos.backend.repository.EmployeeRepository;
+import com.pos.backend.repository.MerchantRepository;
 import com.pos.backend.repository.OrderRepository;
 import com.pos.backend.repository.PaymentRepository;
 import com.pos.backend.repository.ProductRepository;
@@ -27,15 +29,21 @@ public class OrderPaymentService {
   private final ProductRepository productRepository;
   private final DiscountRepository discountRepository;
   private final PaymentRepository paymentRepository;
+  private final MerchantRepository merchantRepository;
+  private final EmployeeRepository employeeRepository;
 
   public OrderPaymentService(OrderRepository orderRepository,
                              ProductRepository productRepository,
                              DiscountRepository discountRepository,
-                             PaymentRepository paymentRepository) {
+                             PaymentRepository paymentRepository,
+                             MerchantRepository merchantRepository,
+                             EmployeeRepository employeeRepository) {
     this.orderRepository = orderRepository;
     this.productRepository = productRepository;
     this.discountRepository = discountRepository;
     this.paymentRepository = paymentRepository;
+    this.merchantRepository = merchantRepository;
+    this.employeeRepository = employeeRepository;
   }
 
   @Transactional
@@ -46,20 +54,38 @@ public class OrderPaymentService {
     PaymentCreateRequest paymentReq
   ) {
 
+    // Order 생성 및 기본 status 설정
     Order order = new Order();
     order.setOrderNumber(orderReq.getOrderNumber());
-    order.setMerchant(orderRepository.getReferenceById(orderReq.getMerchantId()).getMerchant());
-    order.setEmployee(orderRepository.getReferenceById(orderReq.getEmployeeId()).getEmployee());
+    order.setStatus(OrderStatus.open); // 기본값 설정
 
-    for (OrderItemCreateRequest itemReq : itemsReq) {
-      OrderItem item = new OrderItem(
-        productRepository.getReferenceById(itemReq.getProductId()),
-        itemReq.getQuantity(),
-        itemReq.getUnitPrice()
-      );
-      order.addItem(item);
+    // Merchant 조회
+    order.setMerchant(
+      merchantRepository.findById(orderReq.getMerchantId())
+        .orElseThrow(() -> new IllegalArgumentException("Merchant not found"))
+    );
+
+    // Employee 조회
+    order.setEmployee(
+      employeeRepository.findById(orderReq.getEmployeeId())
+        .orElseThrow(() -> new IllegalArgumentException("Employee not found"))
+    );
+
+    // OrderItem 처리
+    if (itemsReq != null) {
+      for (OrderItemCreateRequest itemReq : itemsReq) {
+        order.addItem(
+          new OrderItem(
+            productRepository.findById(itemReq.getProductId())
+              .orElseThrow(() -> new IllegalArgumentException("Product not found: " + itemReq.getProductId())),
+            itemReq.getQuantity(),
+            itemReq.getUnitPrice()
+          )
+        );
+      }
     }
 
+    // Discount 처리
     if (discountId != null) {
       Discount discount = discountRepository.findById(discountId)
         .orElseThrow(() -> new IllegalArgumentException("Discount not found"));
@@ -68,11 +94,17 @@ public class OrderPaymentService {
         BigDecimal discountAmount = calculateDiscount(order.getTotalAmount(), discount);
         order.setDiscount(discount);
         order.setFinalAmount(order.getTotalAmount() - discountAmount.intValue());
+      } else {
+        order.setFinalAmount(order.getTotalAmount());
       }
+    } else {
+      order.setFinalAmount(order.getTotalAmount());
     }
 
+    // Order 저장
     orderRepository.save(order);
 
+    // Payment 처리
     Payment payment = new Payment();
     payment.setOrder(order);
     payment.setMerchant(order.getMerchant());
@@ -83,8 +115,11 @@ public class OrderPaymentService {
 
     paymentRepository.save(payment);
 
+    // 결제 완료 처리
     payment.setStatus(PaymentStatus.completed);
     payment.setProcessedAt(OffsetDateTime.now());
+
+    // Order 상태 업데이트
     order.setStatus(OrderStatus.completed);
 
     return PaymentResponse.from(payment);
@@ -99,6 +134,4 @@ public class OrderPaymentService {
       return discount.getValue();
     }
   }
-
-  //
 }

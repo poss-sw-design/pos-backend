@@ -1,10 +1,13 @@
 package com.pos.backend.dto.order;
 
 import com.pos.backend.domain.order.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class OrderUpdateRequest {
 
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private OrderStatus status;
+
   private String specialRequests;
   private Long discountId;
 
