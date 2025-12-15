@@ -38,7 +38,7 @@ public class Employee {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
-  private EmployeeStatus status = EmployeeStatus.ACTIVE;
+  private EmployeeStatus status = EmployeeStatus.active;
 
   @Column(nullable = false)
   private OffsetDateTime createdAt = OffsetDateTime.now();
@@ -60,7 +60,7 @@ public class Employee {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
-    this.status = EmployeeStatus.ACTIVE;
+    this.status = EmployeeStatus.active;
   }
 
   public Employee(Merchant merchant, Branch branch, Role role, String email, String password, String firstName, String lastName, String phone) {

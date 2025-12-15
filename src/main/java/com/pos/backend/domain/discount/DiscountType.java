@@ -1,6 +1,6 @@
 package com.pos.backend.domain.discount;
 
 public enum DiscountType {
-  ORDER_DISCOUNT,
-  PRODUCT_DISCOUNT
+  order_discount,
+  product_discount
 }

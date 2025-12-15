@@ -40,11 +40,19 @@ public class OrderItem {
   }
 
   public Long getOrderItemId() { return orderItemId; }
+
   public Order getOrder() { return order; }
   public void setOrder(Order order) { this.order = order; }
+
   public Product getProduct() { return product; }
+  public void setProduct(Product product) { this.product = product; }
+
   public Integer getQuantity() { return quantity; }
   public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
   public Integer getUnitPrice() { return unitPrice; }
+  public void setUnitPrice(Integer unitPrice) { this.unitPrice = unitPrice; }
+
   public OffsetDateTime getCreatedAt() { return createdAt; }
+  public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
 }

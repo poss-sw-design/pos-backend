@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/merchants")
 public class MerchantController {
@@ -41,5 +43,10 @@ public class MerchantController {
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     merchantService.deleteMerchant(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping
+  public ResponseEntity<List<MerchantResponse>> getAllMerchants() {
+    return ResponseEntity.ok(merchantService.getAllMerchants());
   }
 }

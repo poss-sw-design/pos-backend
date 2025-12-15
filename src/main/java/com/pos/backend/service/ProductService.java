@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -74,7 +76,7 @@ public class ProductService {
     Product p = productRepository.findById(productId)
       .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
-    if (p.getStatus() == ProductStatus.INACTIVE) {
+    if (p.getStatus() == ProductStatus.inactive) {
       throw new IllegalStateException("Product is inactive");
     }
 
@@ -120,7 +122,13 @@ public class ProductService {
     Product product = productRepository.findById(productId)
       .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
-    product.setStatus(ProductStatus.INACTIVE);
+    product.setStatus(ProductStatus.inactive);
     product.setUpdatedAt(OffsetDateTime.now());
+  }
+
+  public List<ProductResponse> getAllProducts() {
+    return productRepository.findAll().stream()
+      .map(ProductResponse::from)
+      .collect(Collectors.toList());
   }
 }

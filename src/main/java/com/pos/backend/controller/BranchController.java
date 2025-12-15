@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/branches")
 public class BranchController {
@@ -26,5 +28,10 @@ public class BranchController {
   @GetMapping("/{branchId}")
   public BranchResponse getBranch(@PathVariable Long branchId) {
     return branchService.getBranch(branchId);
+  }
+
+  @GetMapping
+  public List<BranchResponse> getAllBranches() {
+    return branchService.getAllBranches();
   }
 }

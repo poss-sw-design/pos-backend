@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -43,5 +45,10 @@ public class ProductController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteProduct(@PathVariable Long productId) {
     productService.deleteProduct(productId);
+  }
+
+  @GetMapping
+  public List<ProductResponse> getAllProducts() {
+    return productService.getAllProducts();
   }
 }

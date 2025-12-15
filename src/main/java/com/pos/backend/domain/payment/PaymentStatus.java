@@ -1,8 +1,8 @@
 package com.pos.backend.domain.payment;
 
 public enum PaymentStatus {
-  PENDING,
-  PROCESSING,
-  COMPLETED,
-  FAILED
+  pending,
+  processing,
+  completed,
+  failed
 }

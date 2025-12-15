@@ -51,13 +51,13 @@ public class Order {
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrderItem> items = new ArrayList<>();
 
-  protected Order() {}
+  public Order() {}
 
   public Order(Merchant merchant, Employee employee, String orderNumber) {
     this.merchant = merchant;
     this.employee = employee;
     this.orderNumber = orderNumber;
-    this.status = OrderStatus.OPEN;
+    this.status = OrderStatus.open;
   }
 
   public void addItem(OrderItem item) {
@@ -80,17 +80,39 @@ public class Order {
   }
 
   public Long getOrderId() { return orderId; }
+
   public Merchant getMerchant() { return merchant; }
+  public void setMerchant(Merchant merchant) { this.merchant = merchant; }
+
   public Employee getEmployee() { return employee; }
+  public void setEmployee(Employee employee) { this.employee = employee; }
+
   public String getOrderNumber() { return orderNumber; }
+  public void setOrderNumber(String orderNumber) { this.orderNumber = orderNumber; }
+
   public Discount getDiscount() { return discount; }
   public void setDiscount(Discount discount) { this.discount = discount; }
+
   public OrderStatus getStatus() { return status; }
   public void setStatus(OrderStatus status) { this.status = status; }
+
   public String getSpecialRequests() { return specialRequests; }
   public void setSpecialRequests(String specialRequests) { this.specialRequests = specialRequests; }
+
   public OffsetDateTime getOrderDate() { return orderDate; }
+  public void setOrderDate(OffsetDateTime orderDate) { this.orderDate = orderDate; }
+
   public Integer getTotalAmount() { return totalAmount; }
+  public void setTotalAmount(Integer totalAmount) { this.totalAmount = totalAmount; }
+
   public Integer getFinalAmount() { return finalAmount; }
+  public void setFinalAmount(Integer finalAmount) { this.finalAmount = finalAmount; }
+
   public List<OrderItem> getItems() { return items; }
+  public void setItems(List<OrderItem> items) {
+    this.items.clear();
+    if (items != null) {
+      items.forEach(this::addItem);
+    }
+  }
 }

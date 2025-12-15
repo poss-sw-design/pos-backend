@@ -1,8 +1,9 @@
 package com.pos.backend.domain.order;
 
 public enum OrderStatus {
-  OPEN,
-  CLOSED,
-  CANCELLED,
-  REFUNDED
+  open,
+  closed,
+  cancelled,
+  completed,
+  refunded
 }
