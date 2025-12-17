@@ -104,4 +104,13 @@ public class ReservationService {
       .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
     reservationRepository.delete(reservation);
   }
+
+  @Transactional
+  public ReservationResponse cancelReservation(Long id) {
+    Reservation reservation = reservationRepository.findById(id)
+      .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
+    reservation.setStatus(ReservationStatus.canceled);
+    reservationRepository.save(reservation);
+    return ReservationResponse.from(reservation);
+  }
 }
