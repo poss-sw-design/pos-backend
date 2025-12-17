@@ -137,6 +137,7 @@ CREATE TABLE orders (
   order_date TIMESTAMPTZ NOT NULL,
   total_amount NUMERIC(10,2) NOT NULL,
   final_amount NUMERIC(10,2) NOT NULL,
+  tax_amount NUMERIC(10,2) NOT NULL DEFAULT 0,
   CONSTRAINT fk_order_merchant FOREIGN KEY (merchant_id) REFERENCES merchant(merchant_id),
   CONSTRAINT fk_order_employee FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
   CONSTRAINT fk_order_discount FOREIGN KEY (discount_id) REFERENCES discount(discount_id)
@@ -148,6 +149,8 @@ CREATE TABLE order_item (
   product_id BIGINT NOT NULL,
   quantity INT NOT NULL,
   unit_price NUMERIC(10,2) NOT NULL,
+  tax_rate NUMERIC(5,2) NOT NULL DEFAULT 0,
+  tax_amount NUMERIC(10,2) NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL,
   CONSTRAINT uk_order_product UNIQUE (order_id, product_id)
 );

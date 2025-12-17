@@ -1,10 +1,10 @@
 package com.pos.backend.domain.order;
 
 import com.pos.backend.domain.Merchant;
-import com.pos.backend.domain.employee.Employee;
 import com.pos.backend.domain.discount.Discount;
+import com.pos.backend.domain.employee.Employee;
 import jakarta.persistence.*;
-
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,28 +25,30 @@ public class Order {
   @JoinColumn(name = "employee_id", nullable = false)
   private Employee employee;
 
-  @Column(nullable = false, length = 50, unique = true)
+  @Column(nullable = false)
   private String orderNumber;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "discount_id")
-  private Discount discount;
-
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, length = 20)
   private OrderStatus status;
 
-  @Column(columnDefinition = "TEXT")
+  @Column
   private String specialRequests;
 
   @Column(nullable = false)
   private OffsetDateTime orderDate = OffsetDateTime.now();
 
   @Column(nullable = false)
-  private Integer totalAmount = 0;
+  private BigDecimal totalAmount = BigDecimal.ZERO;
 
   @Column(nullable = false)
-  private Integer finalAmount = 0;
+  private BigDecimal taxAmount = BigDecimal.ZERO;
+
+  @Column(nullable = false)
+  private BigDecimal finalAmount = BigDecimal.ZERO;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "discount_id")
+  private Discount discount;
 
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrderItem> items = new ArrayList<>();
@@ -61,58 +63,38 @@ public class Order {
   }
 
   public void addItem(OrderItem item) {
-    items.add(item);
     item.setOrder(this);
-    recalculateAmounts();
+    this.items.add(item);
   }
 
   public void removeItem(OrderItem item) {
-    items.remove(item);
+    this.items.remove(item);
     item.setOrder(null);
-    recalculateAmounts();
   }
 
-  public void recalculateAmounts() {
-    this.totalAmount = items.stream()
-      .mapToInt(i -> i.getUnitPrice() * i.getQuantity())
-      .sum();
-    this.finalAmount = this.totalAmount;
+  public void setDiscount(Discount discount) {
+    this.discount = discount;
   }
 
   public Long getOrderId() { return orderId; }
-
   public Merchant getMerchant() { return merchant; }
   public void setMerchant(Merchant merchant) { this.merchant = merchant; }
-
   public Employee getEmployee() { return employee; }
   public void setEmployee(Employee employee) { this.employee = employee; }
-
   public String getOrderNumber() { return orderNumber; }
   public void setOrderNumber(String orderNumber) { this.orderNumber = orderNumber; }
-
-  public Discount getDiscount() { return discount; }
-  public void setDiscount(Discount discount) { this.discount = discount; }
-
   public OrderStatus getStatus() { return status; }
   public void setStatus(OrderStatus status) { this.status = status; }
-
   public String getSpecialRequests() { return specialRequests; }
   public void setSpecialRequests(String specialRequests) { this.specialRequests = specialRequests; }
-
   public OffsetDateTime getOrderDate() { return orderDate; }
   public void setOrderDate(OffsetDateTime orderDate) { this.orderDate = orderDate; }
-
-  public Integer getTotalAmount() { return totalAmount; }
-  public void setTotalAmount(Integer totalAmount) { this.totalAmount = totalAmount; }
-
-  public Integer getFinalAmount() { return finalAmount; }
-  public void setFinalAmount(Integer finalAmount) { this.finalAmount = finalAmount; }
-
+  public BigDecimal getTotalAmount() { return totalAmount; }
+  public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
+  public BigDecimal getTaxAmount() { return taxAmount; }
+  public void setTaxAmount(BigDecimal taxAmount) { this.taxAmount = taxAmount; }
+  public BigDecimal getFinalAmount() { return finalAmount; }
+  public void setFinalAmount(BigDecimal finalAmount) { this.finalAmount = finalAmount; }
   public List<OrderItem> getItems() { return items; }
-  public void setItems(List<OrderItem> items) {
-    this.items.clear();
-    if (items != null) {
-      items.forEach(this::addItem);
-    }
-  }
+  public void setItems(List<OrderItem> items) { this.items = items; }
 }
