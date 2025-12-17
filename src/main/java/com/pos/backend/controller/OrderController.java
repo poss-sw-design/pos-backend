@@ -2,9 +2,10 @@ package com.pos.backend.controller;
 
 import com.pos.backend.dto.order.*;
 import com.pos.backend.service.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -19,8 +20,10 @@ public class OrderController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public OrderResponse createOrder(@Valid @RequestBody OrderCreateWrapper wrapper) {
-    return orderService.createOrder(wrapper.getOrder(), wrapper.getItems());
+  public OrderResponse createOrder(
+    @Valid @RequestBody OrderCreateRequest request
+  ) {
+    return orderService.createOrder(request);
   }
 
   @GetMapping("/{orderId}")
@@ -29,8 +32,10 @@ public class OrderController {
   }
 
   @PutMapping("/{orderId}")
-  public OrderResponse updateOrder(@PathVariable Long orderId,
-                                   @RequestBody OrderUpdateRequest request) {
+  public OrderResponse updateOrder(
+    @PathVariable Long orderId,
+    @RequestBody OrderUpdateRequest request
+  ) {
     return orderService.updateOrder(orderId, request);
   }
 
@@ -41,21 +46,27 @@ public class OrderController {
   }
 
   @PostMapping("/{orderId}/items")
-  public OrderResponse addOrderItem(@PathVariable Long orderId,
-                                    @RequestBody OrderItemCreateRequest request) {
+  public OrderResponse addOrderItem(
+    @PathVariable Long orderId,
+    @RequestBody OrderItemCreateRequest request
+  ) {
     return orderService.addOrderItem(orderId, request);
   }
 
   @PutMapping("/{orderId}/items/{orderItemId}")
-  public OrderResponse updateOrderItem(@PathVariable Long orderId,
-                                       @PathVariable Long orderItemId,
-                                       @RequestBody OrderItemUpdateRequest request) {
+  public OrderResponse updateOrderItem(
+    @PathVariable Long orderId,
+    @PathVariable Long orderItemId,
+    @RequestBody OrderItemUpdateRequest request
+  ) {
     return orderService.updateOrderItem(orderId, orderItemId, request);
   }
 
   @DeleteMapping("/{orderId}/items/{orderItemId}")
-  public OrderResponse removeOrderItem(@PathVariable Long orderId,
-                                       @PathVariable Long orderItemId) {
+  public OrderResponse removeOrderItem(
+    @PathVariable Long orderId,
+    @PathVariable Long orderItemId
+  ) {
     return orderService.removeOrderItem(orderId, orderItemId);
   }
 
